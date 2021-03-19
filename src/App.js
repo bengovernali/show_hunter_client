@@ -1,9 +1,11 @@
 import { AppContainer } from './components/styled-components/AppStyles'
 
+import AppRouter from './components/Router'
+
 function App() {
   return (
     <AppContainer>
-      <div>SHOWHUNTER</div>
+      <AppRouter />
     </AppContainer>
   );
 }
