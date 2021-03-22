@@ -1,6 +1,7 @@
 import React from 'react'
 
 import Login from './login/Login'
+import Home from './home/Home'
 
 import {
     BrowserRouter as Router,
@@ -13,13 +14,13 @@ function AppRouter() {
     return (
         <Router>
             <Switch>
-                <Route path="/">
-                    <Login />
-                </Route>
                 <Route path='/home'>
-                    <div>HOME</div>
+                    <Home />
                 </Route>
                 <Route path='/:ath'>
+                    <Login />
+                </Route>
+                <Route path="/">
                     <Login />
                 </Route>
             </Switch>
