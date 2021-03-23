@@ -50,6 +50,7 @@ function Home() {
     }
 
     const requestEvents = async () => {
+        setEvents([])
         toggleLoading(true)
         const token = getCookie("ath")
         const response = await axios.get(`http://localhost:3000/home/scan/${token}/${artist}/${city}`)
