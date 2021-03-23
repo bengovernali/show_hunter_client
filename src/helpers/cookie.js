@@ -8,5 +8,10 @@ export function setCookie(name, value) {
 
 export function getCookie(name) {
     const cookies = new Cookies()
-    console.log(cookies.get(name))
+    return cookies.get(name)
+}
+
+export function deleteCookie(name) {
+    const cookies = new Cookies()
+    cookies.remove(name)
 }

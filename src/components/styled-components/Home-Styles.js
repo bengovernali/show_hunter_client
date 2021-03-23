@@ -9,9 +9,11 @@ export const HomeContainer = styled.div`
 `
 
 export const Icon = styled.img`
-    max-height: 200px;
-    align-self: flex-start;
-    justify-self: flex-start;
+    max-width: 250px;
+`
+
+export const IconContainer = styled.div`
+    max-width: 250px;
 `
 
 export const MainForm = styled.form`
@@ -59,4 +61,20 @@ export const SubmitButton = styled.button`
 export const Footer = styled.div`
     height: 50px;
     text-align: center;
+`
+
+export const NavBar = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+`
+
+export const LogoutButton = styled.div`
+    margin: 50px;
+
+    &:hover {
+        cursor: pointer;
+    }
+
 `

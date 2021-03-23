@@ -6,4 +6,5 @@ export const AppContainer = styled.div`
     height: 100vh;
     width: 100vw;
     color: #FFFFFF;
+    font-family: Circular, Helvetica, Arial, sans-serif, IosFix;
 `
