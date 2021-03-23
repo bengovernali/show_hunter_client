@@ -16,6 +16,10 @@ import {
     IconContainer
  } from '../styled-components/Home-Styles'
 
+ import { CardContainer } from '../styled-components/CardStyles'
+
+ import EventCard from './EventCard'
+
  import logo from '../../images/logo2.png'
 
  import { createBrowserHistory } from 'history'
@@ -27,6 +31,8 @@ import {
 function Home() {
     const [artist, setArtist] = useState("")
     const [city, setCity] = useState("")
+    const [events, setEvents] = useState([])
+    const [loading, toggleLoading] = useState(false)
 
     const history = createBrowserHistory()
     
@@ -43,7 +49,7 @@ function Home() {
     const requestEvents = async () => {
         const token = getCookie("ath")
         const response = await axios.get(`http://localhost:3000/home/scan/${token}/${artist}/${city}`)
-        console.log(response)
+        setEvents(response.data.events)
     }
 
     const logout = () => {
@@ -66,6 +72,14 @@ function Home() {
                 <FormBar id="city" onChange={(e) => handleInput(e)} placeholder="Please Enter a City" />
                 <SubmitButton onClick={(e) => handleSubmit(e)}>Submit</SubmitButton>
             </MainForm>
+            {
+                events.length > 0 ?
+                <CardContainer>
+                    {events.map((item) => {
+                        return <EventCard image={item.image} url={item.url} name={item.name} venue={item.venue} date={item.date} time={item.time} />
+                    })}
+                </CardContainer> : null
+            } 
             <Footer>&#8482; Benjamin Governali</Footer>
         </HomeContainer>
     )
