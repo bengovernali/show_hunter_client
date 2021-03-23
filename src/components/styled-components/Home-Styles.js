@@ -1,11 +1,14 @@
 import styled from 'styled-components'
 
 export const HomeContainer = styled.div`
+    width: 100%;
+`
+
+export const HomeBody = styled.div`
     height: 100%;
     width: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
 `
 
 export const Icon = styled.img`
@@ -20,6 +23,7 @@ export const MainForm = styled.form`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    margin-top: 200px;
 `
 
 export const FormBar = styled.input`
@@ -61,6 +65,9 @@ export const SubmitButton = styled.button`
 export const Footer = styled.div`
     height: 50px;
     text-align: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
 `
 
 export const NavBar = styled.div`

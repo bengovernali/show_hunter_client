@@ -4,29 +4,33 @@ import axios from 'axios'
 
 import { getCookie, deleteCookie } from '../../helpers/cookie'
 
-import { 
+import {
     HomeContainer,
     Icon,
     MainForm,
     FormBar,
     SubmitButton,
-    Footer,
     NavBar,
     LogoutButton,
-    IconContainer
- } from '../styled-components/Home-Styles'
+    IconContainer,
+    HomeBody
+} from '../styled-components/Home-Styles'
 
- import { CardContainer } from '../styled-components/CardStyles'
+import { CardContainer } from '../styled-components/CardStyles'
 
- import EventCard from './EventCard'
+import EventCard from './EventCard'
 
- import logo from '../../images/logo2.png'
+import logo from '../../images/logo2.png'
 
- import { createBrowserHistory } from 'history'
+import { createBrowserHistory } from 'history'
 
- import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
- import { faPowerOff } from '@fortawesome/free-solid-svg-icons'
+import { faPowerOff } from '@fortawesome/free-solid-svg-icons'
+
+import { convertDate, convertTime } from '../../helpers/dateTime'
+
+import Loader from './Loader'
 
 function Home() {
     const [artist, setArtist] = useState("")
@@ -35,28 +39,29 @@ function Home() {
     const [loading, toggleLoading] = useState(false)
 
     const history = createBrowserHistory()
-    
+
     const handleInput = (e) => {
         e.target.id === 'artist' ? setArtist(e.target.value) : setCity(e.target.value)
     }
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        console.log(artist, city)
         requestEvents()
     }
 
     const requestEvents = async () => {
+        toggleLoading(true)
         const token = getCookie("ath")
         const response = await axios.get(`http://localhost:3000/home/scan/${token}/${artist}/${city}`)
         setEvents(response.data.events)
+        toggleLoading(false)
     }
 
     const logout = () => {
         deleteCookie("ath")
         history.push('/login')
     }
-    
+
     return (
         <HomeContainer>
             <NavBar>
@@ -64,23 +69,25 @@ function Home() {
                     <Icon src={logo} />
                 </IconContainer>
                 <LogoutButton onClick={logout}>
-                   <FontAwesomeIcon icon={faPowerOff} color="red" size="3x" /> 
+                    <FontAwesomeIcon icon={faPowerOff} color="red" size="3x" />
                 </LogoutButton>
             </NavBar>
-            <MainForm>
-                <FormBar id="artist" onChange={(e) => handleInput(e)} placeholder="Please Enter an Artist" />
-                <FormBar id="city" onChange={(e) => handleInput(e)} placeholder="Please Enter a City" />
-                <SubmitButton onClick={(e) => handleSubmit(e)}>Submit</SubmitButton>
-            </MainForm>
-            {
-                events.length > 0 ?
-                <CardContainer>
-                    {events.map((item) => {
-                        return <EventCard image={item.image} url={item.url} name={item.name} venue={item.venue} date={item.date} time={item.time} />
-                    })}
-                </CardContainer> : null
-            } 
-            <Footer>&#8482; Benjamin Governali</Footer>
+            <HomeBody>
+                <MainForm>
+                    <FormBar id="artist" onChange={(e) => handleInput(e)} placeholder="Please Enter an Artist" />
+                    <FormBar id="city" onChange={(e) => handleInput(e)} placeholder="Please Enter a City" />
+                    <SubmitButton onClick={(e) => handleSubmit(e)}>Submit</SubmitButton>
+                </MainForm>
+                {
+                    events.length > 0 ?
+                        <CardContainer>
+                            {events.map((item) => {
+                                return <EventCard image={item.image} url={item.url} name={item.name} venue={item.venue} date={convertDate(item.date)} time={convertTime(item.time)} />
+                            })}
+                        </CardContainer> : 
+                    loading ? <Loader /> : null
+                }
+            </HomeBody>
         </HomeContainer>
     )
 }
