@@ -10,12 +10,14 @@ import {
     Redirect
 } from 'react-router-dom'
 
-import { getCookie } from '../helpers/cookie'
+import { connect } from 'react-redux'
 
-function AppRouter() {
+function AppRouter({tokenPresent}) {
 
+    console.log(tokenPresent)
+    
     const checkToken = (component) => {
-        if (!getCookie('ath')) {
+        if (!tokenPresent) {
             return <Redirect to="/" />
         } else {
             return component
@@ -29,14 +31,20 @@ function AppRouter() {
                     {checkToken(<Home />)}
                 </Route>
                 <Route path='/:ath'>
-                    { !getCookie('ath') ? <Login /> : <Redirect to='/home' />}
+                    { !tokenPresent ? <Login /> : <Redirect to='/home' />}
                 </Route>
                 <Route path="/">
-                    { !getCookie('ath') ? <Login /> : <Redirect to='/home' />}
+                    { !tokenPresent ? <Login /> : <Redirect to='/home' />}
                 </Route>
             </Switch>
         </Router>
     )
 }
 
-export default AppRouter
+function mapStateToProps(state) {
+    return {
+        tokenPresent: state.tokenReducer.tokenPresent
+    }
+}
+
+export default connect(mapStateToProps)(AppRouter)
