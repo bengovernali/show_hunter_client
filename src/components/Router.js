@@ -6,22 +6,33 @@ import Home from './home/Home'
 import {
     BrowserRouter as Router,
     Switch,
-    Route
+    Route,
+    Redirect
 } from 'react-router-dom'
+
+import { getCookie } from '../helpers/cookie'
 
 function AppRouter() {
 
+    const checkToken = (component) => {
+        if (!getCookie('ath')) {
+            return <Redirect to="/" />
+        } else {
+            return component
+        }
+    }
+    
     return (
         <Router>
             <Switch>
                 <Route path='/home'>
-                    <Home />
+                    {checkToken(<Home />)}
                 </Route>
                 <Route path='/:ath'>
-                    <Login />
+                    { !getCookie('ath') ? <Login /> : <Redirect to='/home' />}
                 </Route>
                 <Route path="/">
-                    <Login />
+                    { !getCookie('ath') ? <Login /> : <Redirect to='/home' />}
                 </Route>
             </Switch>
         </Router>
