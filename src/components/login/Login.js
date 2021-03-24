@@ -4,7 +4,9 @@ import { useLocation } from 'react-router-dom'
 
 import { setCookie } from '../../helpers/cookie'
 
-import { createBrowserHistory } from 'history'
+import { connect } from 'react-redux'
+
+import { addToken } from '../../redux/actions/tokenActions'
 
 import {
     LoginContainer,
@@ -14,9 +16,7 @@ import {
 
 import logo from '../../images/logo2.png'
 
-function Login() {
-
-    const history = createBrowserHistory()
+function Login({addToken}) {
 
     const useQuery = () => {
         return new URLSearchParams(useLocation().search)
@@ -27,9 +27,9 @@ function Login() {
     useEffect(() => {
         if (!!query.get("ath")) {
             setCookie('ath', query.get("ath"))
-            history.push('/home')
+            addToken()
         }
-    }, [history, query])
+    }, [query])
 
     return (
         <>
@@ -43,4 +43,10 @@ function Login() {
     )
 }
 
-export default Login
+const mapDispatchToProps = (dispatch) => {
+    return {
+        addToken: () => dispatch(addToken)
+    }
+}
+
+export default connect(null, mapDispatchToProps)(Login)

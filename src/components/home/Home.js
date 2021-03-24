@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import axios from 'axios'
 
@@ -22,8 +22,6 @@ import EventCard from './EventCard'
 
 import logo from '../../images/logo2.png'
 
-import { createBrowserHistory } from 'history'
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import { faPowerOff } from '@fortawesome/free-solid-svg-icons'
@@ -32,13 +30,16 @@ import { convertDate, convertTime } from '../../helpers/dateTime'
 
 import Loader from './Loader'
 
-function Home() {
+import { deleteToken } from '../../redux/actions/tokenActions'
+
+import { connect } from 'react-redux'
+
+function Home({deleteToken}) {
     const [artist, setArtist] = useState("")
     const [city, setCity] = useState("")
     const [events, setEvents] = useState([])
     const [loading, toggleLoading] = useState(false)
-
-    const history = createBrowserHistory()
+    const [tokenExists, toggleToken] = useState(!!getCookie('ath'))
 
     const handleInput = (e) => {
         e.target.id === 'artist' ? setArtist(e.target.value) : setCity(e.target.value)
@@ -60,8 +61,14 @@ function Home() {
 
     const logout = () => {
         deleteCookie("ath")
-        history.push('/login')
+        toggleToken(false)
     }
+
+    useEffect(() => {
+        if (!tokenExists) {
+            deleteToken()
+        }
+    }, [tokenExists])
 
     return (
         <HomeContainer>
@@ -93,4 +100,10 @@ function Home() {
     )
 }
 
-export default Home
+const mapDispatchToProps = (dispatch) => {
+    return {
+        deleteToken: () => dispatch(deleteToken)
+    }
+}
+
+export default connect(null, mapDispatchToProps)(Home)

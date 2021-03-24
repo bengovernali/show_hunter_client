@@ -13,22 +13,11 @@ import {
 import { connect } from 'react-redux'
 
 function AppRouter({tokenPresent}) {
-
-    console.log(tokenPresent)
-    
-    const checkToken = (component) => {
-        if (!tokenPresent) {
-            return <Redirect to="/" />
-        } else {
-            return component
-        }
-    }
-    
     return (
         <Router>
             <Switch>
                 <Route path='/home'>
-                    {checkToken(<Home />)}
+                    {!!tokenPresent ? <Home /> : <Redirect to='/' />}
                 </Route>
                 <Route path='/:ath'>
                     { !tokenPresent ? <Login /> : <Redirect to='/home' />}
