@@ -54,7 +54,7 @@ function Home({deleteToken}) {
         setEvents([])
         toggleLoading(true)
         const token = getCookie("ath")
-        const response = await axios.get(`http://localhost:3000/home/scan/${token}/${artist}/${city}`)
+        const response = await axios.get(`https://git.heroku.com/showhunter.git/home/scan/${token}/${artist}/${city}`)
         setEvents(response.data.events)
         toggleLoading(false)
     }
