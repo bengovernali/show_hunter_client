@@ -50,17 +50,27 @@ function Home({deleteToken}) {
         requestEvents()
     }
 
+    const requestRefresh = async () => {
+        console.log("Requesting Refresh")
+    }
+
     const requestEvents = async () => {
         setEvents([])
         toggleLoading(true)
         const token = getCookie("ath")
         const response = await axios.get(`http://localhost:3000/home/scan/${token}/${artist}/${city}`)
-        setEvents(response.data.events)
-        toggleLoading(false)
+        console.log(response)
+        if (response.data.events) {
+            setEvents(response.data.events)
+            toggleLoading(false)  
+        } else if (response.data.token) {
+            requestRefresh()
+        }
     }
 
     const logout = () => {
         deleteCookie("ath")
+        deleteCookie("rth")
         toggleToken(false)
     }
 
