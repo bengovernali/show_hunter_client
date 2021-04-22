@@ -35,7 +35,7 @@ function Login({addToken}) {
         <>
             <LoginContainer>
                 <Logo src={logo} />
-                <a href='https://showhunter.herokuapp.com/auth/spotify'>
+                <a href='http://localhost:3000/auth/spotify'>
                     <LoginButton >Login with Spotify</LoginButton>
                 </a>
             </LoginContainer>
