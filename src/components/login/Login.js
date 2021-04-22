@@ -29,7 +29,7 @@ function Login({addToken}) {
             setCookie('ath', query.get("ath"))
             addToken()
         }
-    }, [query])
+    }, [query, addToken])
 
     return (
         <>

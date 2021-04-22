@@ -8,12 +8,12 @@ import {
     HomeContainer,
     Icon,
     MainForm,
-    FormBar,
     SubmitButton,
     NavBar,
     LogoutButton,
     IconContainer,
-    HomeBody
+    HomeBody,
+    FormBar
 } from '../styled-components/Home-Styles'
 
 import { CardContainer } from '../styled-components/CardStyles'
@@ -35,28 +35,28 @@ import { deleteToken } from '../../redux/actions/tokenActions'
 import { connect } from 'react-redux'
 
 function Home({deleteToken}) {
-    const [artist, setArtist] = useState("")
+    const [artists, setArtists] = useState([])
     const [city, setCity] = useState("")
     const [events, setEvents] = useState([])
     const [loading, toggleLoading] = useState(false)
     const [tokenExists, toggleToken] = useState(!!getCookie('ath'))
 
     const handleInput = (e) => {
-        e.target.id === 'artist' ? setArtist(e.target.value) : setCity(e.target.value)
+        setCity(e.target.value)
     }
-
+    
     const handleSubmit = (e) => {
         e.preventDefault()
-        requestEvents()
+        requestArtists()
     }
 
-    const requestEvents = async () => {
+    const requestArtists = async () => {
         setEvents([])
         toggleLoading(true)
         const token = getCookie("ath")
         const response = await axios.get(`http://localhost:3000/home/scan/getArtists/${token}`)
         //setEvents(response.data.events)
-        console.log(response)
+        setArtists(response.data)
         toggleLoading(false)
     }
 
@@ -69,7 +69,14 @@ function Home({deleteToken}) {
         if (!tokenExists) {
             deleteToken()
         }
-    }, [tokenExists])
+    }, [tokenExists, deleteToken])
+
+    
+    useEffect(() => {
+        if (artists.length > 0) {
+            console.log(artists)
+        }
+    }, [artists])
 
     return (
         <HomeContainer>
@@ -83,9 +90,8 @@ function Home({deleteToken}) {
             </NavBar>
             <HomeBody>
                 <MainForm>
-                    <FormBar id="artist" onChange={(e) => handleInput(e)} placeholder="Please Enter an Artist" />
-                    <FormBar id="city" onChange={(e) => handleInput(e)} placeholder="Please Enter a City" />
-                    <SubmitButton onClick={(e) => handleSubmit(e)}>Submit</SubmitButton>
+                    <FormBar id="city" onChange={(e) => handleInput(e)} placeholder="Please Enter Your City" />
+                    <SubmitButton onClick={(e) => handleSubmit(e)}>Start Search</SubmitButton>
                 </MainForm>
                 {
                     events.length > 0 ?
